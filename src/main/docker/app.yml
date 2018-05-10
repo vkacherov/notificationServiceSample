@@ -1,0 +1,14 @@
+version: '2'
+services:
+    notificationservicesample-app:
+        image: notificationservicesample
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mysql://notificationservicesample-mysql:3306/notificationservicesample?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    notificationservicesample-mysql:
+        extends:
+            file: mysql.yml
+            service: notificationservicesample-mysql
