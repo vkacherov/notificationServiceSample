@@ -42,6 +42,7 @@ public class CacheConfiguration {
             cm.createCache(com.microsoft.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(com.microsoft.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(com.microsoft.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(com.microsoft.domain.Notification.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

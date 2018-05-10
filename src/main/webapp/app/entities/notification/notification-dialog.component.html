@@ -1,0 +1,66 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myNotificationLabel" jhiTranslate="notificationServiceSampleApp.notification.home.createOrEditLabel">Create or edit a Notification</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!notification.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="notification.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="notificationServiceSampleApp.notification.channel" for="field_channel">Channel</label>
+            <select class="form-control" name="channel" [(ngModel)]="notification.channel" id="field_channel"  required>
+                <option value="EMAIL">{{'notificationServiceSampleApp.Channel.EMAIL' | translate}}</option>
+                <option value="SMS">{{'notificationServiceSampleApp.Channel.SMS' | translate}}</option>
+                <option value="MOBILE">{{'notificationServiceSampleApp.Channel.MOBILE' | translate}}</option>
+            </select>
+            <div [hidden]="!(editForm.controls.channel?.dirty && editForm.controls.channel?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.channel?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="notificationServiceSampleApp.notification.to" for="field_to">To</label>
+            <input type="text" class="form-control" name="to" id="field_to"
+                [(ngModel)]="notification.to" required/>
+            <div [hidden]="!(editForm.controls.to?.dirty && editForm.controls.to?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.to?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="notificationServiceSampleApp.notification.from" for="field_from">From</label>
+            <input type="text" class="form-control" name="from" id="field_from"
+                [(ngModel)]="notification.from" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="notificationServiceSampleApp.notification.msgUri" for="field_msgUri">Msg Uri</label>
+            <input type="text" class="form-control" name="msgUri" id="field_msgUri"
+                [(ngModel)]="notification.msgUri" required/>
+            <div [hidden]="!(editForm.controls.msgUri?.dirty && editForm.controls.msgUri?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.msgUri?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

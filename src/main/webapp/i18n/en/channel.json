@@ -1,0 +1,10 @@
+{
+    "notificationServiceSampleApp": {
+        "Channel" : {
+            "null": "",
+            "EMAIL": "EMAIL",
+            "SMS": "SMS",
+            "MOBILE": "MOBILE"
+        }
+    }
+}
