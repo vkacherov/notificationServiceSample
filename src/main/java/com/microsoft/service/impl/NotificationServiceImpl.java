@@ -2,11 +2,13 @@ package com.microsoft.service.impl;
 
 import com.microsoft.service.NotificationService;
 import com.microsoft.domain.Notification;
+import com.microsoft.domain.enumeration.Channel;
 import com.microsoft.repository.NotificationRepository;
 import com.microsoft.service.dto.NotificationDTO;
 import com.microsoft.service.mapper.NotificationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +16,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
 /**
  * Service Implementation for managing Notification.
  */
 @Service
 @Transactional
 public class NotificationServiceImpl implements NotificationService {
+
+    @Value("${TWILIO_SID}")
+    private String twilioSid;
+
+    @Value("${TWILIO_KEY}")
+    private String twilioKey;
 
     private final Logger log = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
@@ -43,6 +55,24 @@ public class NotificationServiceImpl implements NotificationService {
         log.debug("Request to save Notification : {}", notificationDTO);
         Notification notification = notificationMapper.toEntity(notificationDTO);
         notification = notificationRepository.save(notification);
+
+        switch( notification.getChannel() ) {
+            case SMS: {
+                Twilio.init(twilioSid, twilioKey);
+                Message message = Message.creator(new PhoneNumber(notification.getTo()),
+                    new PhoneNumber(notification.getFrom()), 
+                    notification.getMsgUri()).create();
+
+                log.debug("Sending Notification :{}", message.getSid());
+                break;
+            }
+            case EMAIL:
+            case MOBILE:
+            default: {
+                log.debug("Channel is not implemented yet");
+            }
+        }
+        
         return notificationMapper.toDto(notification);
     }
 
